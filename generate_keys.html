@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Gerador de VAPID Keys</title>
+  <style>body{font-family:sans-serif;padding:2rem;}button{padding:1rem 2rem;font-size:1rem;}pre{background:#f4f4f4;padding:1rem;border-radius:4px;}</style>
+</head>
+<body>
+  <h1>Gerar VAPID Keys</h1>
+  <button id="genBtn">Gerar Chaves</button>
+  <pre id="output"></pre>
+
+  <script src="https://unpkg.com/web-push@3.5.0/browser.js"></script>
+  <script>
+    document.getElementById('genBtn').addEventListener('click', () => {
+      const keys = webPush.generateVAPIDKeys();
+      document.getElementById('output').textContent =
+        'Public Key: ' + keys.publicKey + '
+' +
+        'Private Key: ' + keys.privateKey;
+    });
+  </script>
+</body>
+</html>
