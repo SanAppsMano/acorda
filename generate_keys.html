@@ -20,10 +20,12 @@
     document.getElementById('genBtn').addEventListener('click', () => {
       // Gera chaves VAPID usando o objeto global webPush
       const keys = webPush.generateVAPIDKeys();
-      document.getElementById('output').textContent =
-        'Public Key: ' + keys.publicKey + '
+      // Usa '
+' explicitamente para evitar quebras literais
+      const outputText = 'Public Key: ' + keys.publicKey + '
 ' +
-        'Private Key: ' + keys.privateKey;
+                         'Private Key: ' + keys.privateKey;
+      document.getElementById('output').textContent = outputText;
     });
   </script>
 </body>
