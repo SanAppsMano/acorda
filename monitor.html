@@ -3,22 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <title>Painel Monitor</title>
-  <style>body{font-family:sans-serif;text-align:center;padding:2rem;}button{padding:1rem 2rem;font-size:1rem;}</style>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 2rem; }
+    button { padding: 1rem 2rem; font-size: 1rem; margin-top: 1rem; }
+    #qr { width: 256px; height: 256px; }
+  </style>
 </head>
 <body>
   <h1>QR Code de Inscrição</h1>
   <img id="qr" alt="QR Code" />
   <p>Aponte seu celular para este QR e aceite notificações.</p>
   <button id="wakeBtn">Acorde todos os inscritos</button>
-  <script src="https://unpkg.com/qrcode/build/qrcode.min.js"></script>
+
+  <!-- Biblioteca QRCode -->
+  <script src="https://unpkg.com/qrcode@1.5.0/build/qrcode.min.js"></script>
   <script>
-    const target = `${location.origin}/subscribe.html`;
-    QRCode.toDataURL(target).then(url=>document.getElementById('qr').src=url);
-    document.getElementById('wakeBtn').onclick = async ()=>{
-      // Chama endpoint de envio no próprio site. Aqui simplificado:
-      fetch('/.netlify/functions/sendPush', {method:'POST'});
-      alert('Notificações enviadas!');
-    };
+    document.addEventListener('DOMContentLoaded', () => {
+      const img = document.getElementById('qr');
+      const target = `${location.origin}/subscribe.html`;
+      // Gera QR e define src da imagem
+      QRCode.toDataURL(target, { width: 256, margin: 2 })
+        .then(url => img.src = url)
+        .catch(err => console.error('Erro ao gerar QR:', err));
+
+      document.getElementById('wakeBtn').addEventListener('click', async () => {
+        try {
+          const res = await fetch('/.netlify/functions/sendPush', { method: 'POST' });
+          alert('Notificações enviadas!');
+        } catch (err) {
+          console.error(err);
+          alert('Erro ao enviar notificações');
+        }
+      });
+    });
   </script>
 </body>
 </html>
