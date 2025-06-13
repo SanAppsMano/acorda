@@ -2,6 +2,7 @@
   publish = "."
   functions = "netlify/functions"
   command = ""
+
 [[redirects]]
   from = "/push"
   to = "/monitor.html"
