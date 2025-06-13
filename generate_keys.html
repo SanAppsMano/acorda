@@ -21,7 +21,7 @@
       // Gera chaves VAPID usando o objeto global webPush
       const keys = webPush.generateVAPIDKeys();
       // Usa '
-' explicitamente para evitar quebras literais
+' para quebra de linha dentro da string
       const outputText = 'Public Key: ' + keys.publicKey + '
 ' +
                          'Private Key: ' + keys.privateKey;
