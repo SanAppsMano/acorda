@@ -5,30 +5,32 @@
   <title>Painel Monitor</title>
   <style>
     body { font-family: sans-serif; text-align: center; padding: 2rem; }
-    button { padding: 1rem 2rem; font-size: 1rem; margin-top: 1rem; }
-    #qr { width: 256px; height: 256px; }
+    #qr { width: 256px; height: 256px; margin: 1rem auto; display: block; }
+    button { padding: 1rem 2rem; font-size: 1rem; }
   </style>
 </head>
 <body>
   <h1>QR Code de Inscrição</h1>
-  <img id="qr" alt="QR Code" />
-  <p>Aponte seu celular para este QR e aceite notificações.</p>
+  <img id="qr" alt="QR Code de inscrição" />
+  <p>Aponte seu celular para este QR e clique em "Ativar alertas".</p>
   <button id="wakeBtn">Acorde todos os inscritos</button>
 
-  <!-- Biblioteca QRCode -->
-  <script src="https://unpkg.com/qrcode@1.5.0/build/qrcode.min.js"></script>
+  <!-- Lib QRCode -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.0/build/qrcode.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const img = document.getElementById('qr');
-      const target = `${location.origin}/subscribe.html`;
-      // Gera QR e define src da imagem
-      QRCode.toDataURL(target, { width: 256, margin: 2 })
+      const targetUrl = `${location.origin}/subscribe.html`;
+      // Gera o QR
+      QRCode.toDataURL(targetUrl, { width: 256, margin: 2 })
         .then(url => img.src = url)
         .catch(err => console.error('Erro ao gerar QR:', err));
 
       document.getElementById('wakeBtn').addEventListener('click', async () => {
         try {
           const res = await fetch('/.netlify/functions/sendPush', { method: 'POST' });
+          const data = await res.json();
+          console.log(data);
           alert('Notificações enviadas!');
         } catch (err) {
           console.error(err);
