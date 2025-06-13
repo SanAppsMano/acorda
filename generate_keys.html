@@ -14,17 +14,17 @@
   <button id="genBtn">Gerar Chaves</button>
   <pre id="output"></pre>
 
-  <!-- Carrega a biblioteca web-push em UMD pelo jsDelivr -->
+  <!-- Biblioteca UMD da web-push -->
   <script src="https://cdn.jsdelivr.net/npm/web-push@3.5.0/dist/web-push.browser.js"></script>
   <script>
     document.getElementById('genBtn').addEventListener('click', () => {
-      // Gera chaves VAPID usando o objeto global webPush
+      // Gera as chaves VAPID
       const keys = webPush.generateVAPIDKeys();
-      // Usa '
-' para quebra de linha dentro da string
+      // Prepara texto com quebras de linha explícitas
       const outputText = 'Public Key: ' + keys.publicKey + '
 ' +
                          'Private Key: ' + keys.privateKey;
+      // Exibe no <pre>
       document.getElementById('output').textContent = outputText;
     });
   </script>
