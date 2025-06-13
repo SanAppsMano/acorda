@@ -20,9 +20,9 @@
     document.getElementById('genBtn').addEventListener('click', () => {
       // Gera as chaves VAPID
       const keys = webPush.generateVAPIDKeys();
-      // Prepara texto com quebras de linha explícitas
+      // Monta o texto com quebra de linha escapada
       const outputText = 'Public Key: ' + keys.publicKey + '
-' + 
+' +
                          'Private Key: ' + keys.privateKey;
       // Exibe no <pre>
       document.getElementById('output').textContent = outputText;
