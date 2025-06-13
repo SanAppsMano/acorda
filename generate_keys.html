@@ -14,15 +14,16 @@
   <button id="genBtn">Gerar Chaves</button>
   <pre id="output"></pre>
 
-  <!-- Usando ES Modules para importar a função de geração -->
-  <script type="module">
-    import { generateVAPIDKeys } from 'https://unpkg.com/web-push@3.5.0/browser.js';
-
+  <!-- Carrega a biblioteca web-push em UMD pelo jsDelivr -->
+  <script src="https://cdn.jsdelivr.net/npm/web-push@3.5.0/dist/web-push.browser.js"></script>
+  <script>
     document.getElementById('genBtn').addEventListener('click', () => {
-      const keys = generateVAPIDKeys();
+      // Gera chaves VAPID usando o objeto global webPush
+      const keys = webPush.generateVAPIDKeys();
       document.getElementById('output').textContent =
-        `Public Key: ${keys.publicKey}
-Private Key: ${keys.privateKey}`;
+        'Public Key: ' + keys.publicKey + '
+' +
+        'Private Key: ' + keys.privateKey;
     });
   </script>
 </body>
