@@ -5,7 +5,7 @@
   <title>Gerador de VAPID Keys</title>
   <style>
     body { font-family: sans-serif; padding: 2rem; }
-    button { padding: 1rem 2rem; font-size: 1rem; }
+    button { padding: 1rem 2rem; font-size: 1rem; margin-bottom: 1rem; }
     pre { background: #f4f4f4; padding: 1rem; border-radius: 4px; white-space: pre-wrap; }
   </style>
 </head>
@@ -14,14 +14,16 @@
   <button id="genBtn">Gerar Chaves</button>
   <pre id="output"></pre>
 
+  <!-- Carrega a biblioteca web-push para browser -->
   <script src="https://unpkg.com/web-push@3.5.0/browser.js"></script>
   <script>
     document.getElementById('genBtn').addEventListener('click', () => {
+      // Gera chaves VAPID
       const keys = webPush.generateVAPIDKeys();
-      document.getElementById('output').textContent =
-        'Public Key: ' + keys.publicKey + '
-' +
-        'Private Key: ' + keys.privateKey;
+      // Exibe no <pre> com quebra de linha
+      const text = `Public Key: ${keys.publicKey}
+Private Key: ${keys.privateKey}`;
+      document.getElementById('output').textContent = text;
     });
   </script>
 </body>
