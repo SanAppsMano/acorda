@@ -1,0 +1,16 @@
+{
+  "name": "netlify-qr-push-test",
+  "version": "1.0.0",
+  "description": "Teste de Push Notifications via QR Code em Netlify",
+  "main": "index.js",
+  "scripts": {
+    "start": "netlify dev",
+    "build": "echo \"Nothing to build\""
+  },
+  "dependencies": {
+    "web-push": "^3.5.0"
+  },
+  "devDependencies": {},
+  "author": "",
+  "license": "MIT"
+}
