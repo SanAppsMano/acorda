@@ -1,43 +1,40 @@
 const fs = require('fs');
 const path = require('path');
 
-const paths = [];
-if (process.env.SUBS_FILE) {
-  paths.push(path.resolve(process.env.SUBS_FILE));
-} else {
-  if (process.env.NETLIFY_DEV) {
-    paths.push(path.join(process.cwd(), 'netlify', 'functions', 'subs.json'));
-  }
-  paths.push(path.join('/tmp', 'subs.json'));
-}
+// Caminho do arquivo compartilhado entre invocações
+const file = process.env.SUBS_FILE ||
+  (process.env.NETLIFY_DEV
+    ? path.join(process.cwd(), 'netlify', 'functions', 'subs.json')
+    : path.join('/tmp', 'subs.json'));
 
-let inMemorySubs = [];
+// Reaproveita em memória se a função continuar viva
+globalThis.acordaSubs = globalThis.acordaSubs || null;
 
 function loadSubs() {
-  for (const p of paths) {
-    if (fs.existsSync(p)) {
-      try {
-        const data = fs.readFileSync(p, 'utf8');
-        const subs = JSON.parse(data);
-        inMemorySubs = Array.isArray(subs) ? subs : [];
-        return inMemorySubs;
-      } catch (e) {
-        // ignore parse errors and continue
-      }
-    }
+  if (globalThis.acordaSubs) {
+    return globalThis.acordaSubs;
   }
-  return inMemorySubs;
+  if (fs.existsSync(file)) {
+    try {
+      const data = fs.readFileSync(file, 'utf8');
+      const parsed = JSON.parse(data);
+      globalThis.acordaSubs = Array.isArray(parsed) ? parsed : [];
+    } catch {
+      globalThis.acordaSubs = [];
+    }
+  } else {
+    globalThis.acordaSubs = [];
+  }
+  return globalThis.acordaSubs;
 }
 
 function saveSubs(subs) {
-  inMemorySubs = subs;
-  for (const p of paths) {
-    try {
-      fs.mkdirSync(path.dirname(p), { recursive: true });
-      fs.writeFileSync(p, JSON.stringify(subs, null, 2));
-    } catch (e) {
-      // ignore write errors
-    }
+  globalThis.acordaSubs = subs;
+  try {
+    fs.mkdirSync(path.dirname(file), { recursive: true });
+    fs.writeFileSync(file, JSON.stringify(subs, null, 2));
+  } catch {
+    // ignore write errors
   }
 }
 
