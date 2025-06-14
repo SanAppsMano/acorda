@@ -16,7 +16,7 @@ exports.handler = async () => {
   if (process.env.SUBS_FILE) {
     paths.push(path.resolve(process.env.SUBS_FILE));
   } else {
-    if (process.env.NETLIFY_DEV) paths.push(path.join(__dirname, 'subs.json'));
+    if (process.env.NETLIFY_DEV) paths.push(path.join(process.cwd(), 'netlify', 'functions', 'subs.json'));
     paths.push(path.join('/tmp', 'subs.json'));
   }
 

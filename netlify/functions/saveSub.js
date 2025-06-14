@@ -9,7 +9,7 @@ exports.handler = async (event) => {
   if (process.env.SUBS_FILE) {
     paths.push(path.resolve(process.env.SUBS_FILE));
   } else {
-    if (process.env.NETLIFY_DEV) paths.push(path.join(__dirname, 'subs.json'));
+    if (process.env.NETLIFY_DEV) paths.push(path.join(process.cwd(), 'netlify', 'functions', 'subs.json'));
     paths.push(path.join('/tmp', 'subs.json'));
   }
 
@@ -21,10 +21,12 @@ exports.handler = async (event) => {
     : [];
 
   if (!subs.find(s => s.endpoint === sub.endpoint)) subs.push(sub);
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, JSON.stringify(subs, null, 2));
   for (const p of paths) {
     if (p !== filePath) {
       try {
+        fs.mkdirSync(path.dirname(p), { recursive: true });
         fs.writeFileSync(p, JSON.stringify(subs, null, 2));
       } catch (e) {
         // ignore paths we cannot write to
