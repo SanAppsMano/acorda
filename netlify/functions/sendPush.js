@@ -13,9 +13,15 @@ webpush.setVapidDetails(
 
 exports.handler = async () => {
   const filePath = path.join(__dirname, 'subs.json');
-  if (!fs.existsSync(filePath)) return { statusCode: 200, body: 'Nenhuma subscription.' };
+  if (!fs.existsSync(filePath)) {
+    return { statusCode: 200, body: JSON.stringify({ message: 'Nenhuma subscription.' }) };
+  }
 
   const subs = JSON.parse(fs.readFileSync(filePath));
+  if (!Array.isArray(subs) || subs.length === 0) {
+    return { statusCode: 200, body: JSON.stringify({ message: 'Nenhuma subscription.' }) };
+  }
+
   const payload = JSON.stringify({ title: 'Acorde!', body: 'Alerta do monitor' });
 
   const results = await Promise.all(subs.map(sub =>
