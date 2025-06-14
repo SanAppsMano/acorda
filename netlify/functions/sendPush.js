@@ -14,7 +14,9 @@ webpush.setVapidDetails(
 exports.handler = async () => {
   const filePath = process.env.SUBS_FILE
     ? path.resolve(process.env.SUBS_FILE)
-    : path.join('/tmp', 'subs.json');
+    : process.env.NETLIFY_DEV
+      ? path.join(__dirname, 'subs.json')
+      : path.join('/tmp', 'subs.json');
   if (!fs.existsSync(filePath)) {
     return { statusCode: 200, body: JSON.stringify({ message: 'Nenhuma subscription.' }) };
   }

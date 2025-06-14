@@ -7,7 +7,9 @@ exports.handler = async (event) => {
   const sub = JSON.parse(event.body);
   const filePath = process.env.SUBS_FILE
     ? path.resolve(process.env.SUBS_FILE)
-    : path.join('/tmp', 'subs.json');
+    : process.env.NETLIFY_DEV
+      ? path.join(__dirname, 'subs.json')
+      : path.join('/tmp', 'subs.json');
   const subs = fs.existsSync(filePath)
     ? JSON.parse(fs.readFileSync(filePath))
     : [];

@@ -24,4 +24,6 @@ Este projeto demonstra um fluxo simples de envio de notificações push utilizan
    Após a inscrição, utilize o botão do monitor para acordar todos os inscritos.
 
 ## Limpeza
-Por padrão, as inscrições são salvas em `/tmp/subs.json`, que é um caminho gravável tanto localmente quanto no ambiente serverless. Caso deseje usar outro local, defina a variável de ambiente `SUBS_FILE` com o caminho desejado.
+Por padrão, durante o `netlify dev` as inscrições ficam em `netlify/functions/subs.json`.
+No ambiente de produção o caminho utilizado é `/tmp/subs.json`, que é gravável nas funções serverless.
+Se preferir, defina a variável `SUBS_FILE` para indicar outro local de armazenamento.
