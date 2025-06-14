@@ -21,9 +21,7 @@
       // Gera as chaves VAPID
       const keys = webPush.generateVAPIDKeys();
       // Monta o texto com quebra de linha escapada
-      const outputText = 'Public Key: ' + keys.publicKey + '
-' +
-                         'Private Key: ' + keys.privateKey;
+      const outputText = `Public Key: ${keys.publicKey}\nPrivate Key: ${keys.privateKey}`;
       // Exibe no <pre>
       document.getElementById('output').textContent = outputText;
     });
