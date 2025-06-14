@@ -10,11 +10,14 @@
   <button id="enableBtn">Ativar alertas</button>
 
   <script>
-    const publicVapidKey = '<SUA_PUBLIC_VAPID_KEY>'; // Substitua aqui
+    const publicVapidKey = 'BOymOl4h63DQGXHJMMJPXYI1gxFIMIX5J2M0pMiH6Qi_XgN7VBOhpYctrXE85Ncr5Ssvfzl-IQQWnV3q8tZ8I4U';
 
     function urlBase64ToUint8Array(base64String) {
       const padding = '='.repeat((4 - base64String.length % 4) % 4);
-      const rawData = window.atob(base64String + padding);
+      const base64 = (base64String + padding)
+        .replace(/-/g, '+')
+        .replace(/_/g, '/');
+      const rawData = window.atob(base64);
       return Uint8Array.from([...rawData].map(char => char.charCodeAt(0)));
     }
 
@@ -23,16 +26,20 @@
         return alert('Push não suportado neste navegador.');
       }
       try {
-        const reg = await navigator.serviceWorker.register('sw.js');
+        const reg = await navigator.serviceWorker.register('/sw.js');
         const sub = await reg.pushManager.subscribe({
           userVisibleOnly: true,
           applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
         });
-        await fetch('/.netlify/functions/saveSub', {
+        const response = await fetch('/.netlify/functions/saveSub', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(sub)
         });
+        if (!response.ok) {
+          const text = await response.text();
+          throw new Error('Erro ao salvar inscrição: ' + text);
+        }
         alert('Inscrição realizada com sucesso!');
       } catch (err) {
         console.error('Erro na inscrição:', err);
