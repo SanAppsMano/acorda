@@ -11,14 +11,11 @@ Este projeto demonstra um fluxo simples de envio de notificações push utilizan
    ```bash
    npm install
    ```
-2. Gere um par de chaves VAPID abrindo `generate_keys.html` em seu navegador. A página realiza todo o processo localmente e exibe as chaves **Public Key** e **Private Key** para você copiar.
-3. Crie um arquivo `.env` na raiz do projeto com as variáveis abaixo:
-   ```bash
-   VAPID_PUBLIC_KEY=<sua public key>
-   VAPID_PRIVATE_KEY=<sua private key>
-   ```
-4. Edite `subscribe.html` e substitua o valor de `publicVapidKey` pelo conteúdo da sua chave pública.
-5. Inicie o ambiente local com:
+2. Este repositório já vem configurado com o seguinte par de chaves VAPID:
+   - **Public Key**: `BOymOl4h63DQGXHJMMJPXYI1gxFIMIX5J2M0pMiH6Qi_XgN7VBOhpYctrXE85Ncr5Ssvfzl-IQQWnV3q8tZ8I4U`
+   - **Private Key**: `D1Frm3VNgDMClKSF1nqqKnppTuDzT_WS-yGD2Bpi9k0`
+   Caso deseje gerar novas chaves, abra `generate_keys.html` em seu navegador.
+3. Inicie o ambiente local com:
    ```bash
    npx netlify dev
    ```
