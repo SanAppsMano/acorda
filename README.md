@@ -26,5 +26,9 @@ Este projeto demonstra um fluxo simples de envio de notificações push utilizan
 
 ## Limpeza
 As inscrições agora são persistidas no serviço **Netlify Blobs**, permitindo que todas as funções acessem o mesmo conjunto de dados tanto localmente quanto em produção.
-Durante o desenvolvimento, caso o serviço não esteja disponível, o projeto cai para um arquivo `subs.json` localizado em `netlify/functions/`.
-Se necessário, é possível definir o caminho desse arquivo através da variável `SUBS_FILE`.
+Para usar o serviço em seu site, execute:
+```bash
+netlify addons:create @netlify/blobs
+```
+Em seguida faça o deploy normalmente. Caso o serviço não esteja disponível (por exemplo, em um fork sem o add‑on habilitado), o projeto cai para um arquivo `subs.json` localizado em `netlify/functions/`.
+É possível alterar o nome do store através da variável `SUBS_STORE` e o caminho do arquivo com `SUBS_FILE`.

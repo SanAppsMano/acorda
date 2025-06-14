@@ -11,6 +11,10 @@ webpush.setVapidDetails(
 );
 
 exports.handler = async (event) => {
+  if (event.httpMethod && event.httpMethod !== 'POST') {
+    return { statusCode: 405, body: 'Method Not Allowed' };
+  }
+
   const subs = await loadSubs(event);
   if (subs.length === 0) {
     return {

@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 let blobs;
+const storeName = process.env.SUBS_STORE || 'acorda';
 
 try {
   blobs = require('@netlify/blobs');
@@ -24,12 +25,13 @@ async function loadSubs(event) {
   if (blobs) {
     try {
       blobs.connectLambda(event);
-      const store = blobs.getStore('acorda');
+      const store = blobs.getStore(storeName);
       const data = await store.get('subs', { type: 'json' });
       globalThis.acordaSubs = Array.isArray(data) ? data : [];
       return globalThis.acordaSubs;
-    } catch {
-      // ignore and fallback to file
+    } catch (err) {
+      console.warn('Netlify Blobs não disponível:', err.message);
+      // fallback para o arquivo local
     }
   }
 
@@ -53,10 +55,10 @@ async function saveSubs(event, subs) {
   if (blobs) {
     try {
       blobs.connectLambda(event);
-      const store = blobs.getStore('acorda');
+      const store = blobs.getStore(storeName);
       await store.setJSON('subs', subs);
-    } catch {
-      // ignore
+    } catch (err) {
+      console.warn('Falha ao salvar no Blobs:', err.message);
     }
   }
 
