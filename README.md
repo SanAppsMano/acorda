@@ -11,7 +11,7 @@ Este projeto demonstra um fluxo simples de envio de notificações push utilizan
    ```bash
    npm install
    ```
-2. Gere um par de chaves VAPID abrindo `generate_keys.html` em seu navegador. Copie os valores de **Public Key** e **Private Key**.
+2. Gere um par de chaves VAPID abrindo `generate_keys.html` em seu navegador. A página realiza todo o processo localmente e exibe as chaves **Public Key** e **Private Key** para você copiar.
 3. Crie um arquivo `.env` na raiz do projeto com as variáveis abaixo:
    ```bash
    VAPID_PUBLIC_KEY=<sua public key>
