@@ -5,7 +5,11 @@ exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
 
   const sub = JSON.parse(event.body);
-  const filePath = path.join(__dirname, 'subs.json');
+  const filePath = process.env.SUBS_FILE
+    ? path.resolve(process.env.SUBS_FILE)
+    : process.env.NETLIFY_DEV
+      ? path.join(__dirname, 'subs.json')
+      : path.join('/tmp', 'subs.json');
   const subs = fs.existsSync(filePath)
     ? JSON.parse(fs.readFileSync(filePath))
     : [];

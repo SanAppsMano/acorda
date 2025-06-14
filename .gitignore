@@ -1,0 +1,4 @@
+node_modules/
+netlify/functions/subs.json
+# Mac/Linux artifacts
+.DS_Store

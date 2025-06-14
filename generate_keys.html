@@ -14,17 +14,41 @@
   <button id="genBtn">Gerar Chaves</button>
   <pre id="output"></pre>
 
-  <!-- Biblioteca UMD da web-push -->
-  <script src="https://cdn.jsdelivr.net/npm/web-push@3.5.0/dist/web-push.browser.js"></script>
   <script>
-    document.getElementById('genBtn').addEventListener('click', () => {
-      // Gera as chaves VAPID
-      const keys = webPush.generateVAPIDKeys();
-      // Monta o texto com quebra de linha escapada
-      const outputText = 'Public Key: ' + keys.publicKey + '
-' +
-                         'Private Key: ' + keys.privateKey;
-      // Exibe no <pre>
+    async function generateVapidKeys() {
+      const pair = await crypto.subtle.generateKey(
+        { name: 'ECDSA', namedCurve: 'P-256' },
+        true,
+        ['sign', 'verify']
+      );
+
+      const pubJwk = await crypto.subtle.exportKey('jwk', pair.publicKey);
+      const privJwk = await crypto.subtle.exportKey('jwk', pair.privateKey);
+
+      const b64ToBytes = (b64url) => {
+        const b64 = b64url.replace(/-/g, '+').replace(/_/g, '/');
+        return Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+      };
+
+      const bytesToB64 = (buf) => {
+        const bin = Array.from(buf, b => String.fromCharCode(b)).join('');
+        return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+      };
+
+      const publicBytes = new Uint8Array(65);
+      publicBytes[0] = 0x04;
+      publicBytes.set(b64ToBytes(pubJwk.x), 1);
+      publicBytes.set(b64ToBytes(pubJwk.y), 33);
+
+      return {
+        publicKey: bytesToB64(publicBytes),
+        privateKey: privJwk.d
+      };
+    }
+
+    document.getElementById('genBtn').addEventListener('click', async () => {
+      const keys = await generateVapidKeys();
+      const outputText = `Public Key: ${keys.publicKey}\nPrivate Key: ${keys.privateKey}`;
       document.getElementById('output').textContent = outputText;
     });
   </script>
