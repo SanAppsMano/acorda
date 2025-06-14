@@ -13,7 +13,7 @@
   <h1>Inscrição via Link</h1>
   <p>Clique no link abaixo em seu celular para ativar notificações:</p>
   <a href="/subscribe.html" target="_blank">Ativar alertas</a>
-  <canvas id="qr" style="margin: 1rem auto; width:200px; height:200px;"></canvas>
+  <div id="qr" style="margin: 1rem auto; width:200px; height:200px;"></div>
   <p>Após a inscrição, no monitor você poderá acordar todos os inscritos.</p>
   <button id="wakeBtn">Acorde todos os inscritos</button>
 
@@ -21,7 +21,11 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const url = window.location.origin + "/subscribe.html";
-      QRCode.toCanvas(document.getElementById("qr"), url, { width: 200 }, err => { if (err) console.error(err); });
+      new QRCode(document.getElementById("qr"), {
+        text: url,
+        width: 200,
+        height: 200
+      });
       document.getElementById('wakeBtn').addEventListener('click', async () => {
         try {
         const res = await fetch('/.netlify/functions/sendPush', { method: 'POST' });
