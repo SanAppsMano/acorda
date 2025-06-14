@@ -6,11 +6,11 @@ exports.handler = async (event) => {
   }
 
   const sub = JSON.parse(event.body);
-  const subs = loadSubs();
+  const subs = await loadSubs(event);
 
   if (!subs.find(s => s.endpoint === sub.endpoint)) {
     subs.push(sub);
-    saveSubs(subs);
+    await saveSubs(event, subs);
   }
 
   return { statusCode: 200, body: 'Subscription saved.' };

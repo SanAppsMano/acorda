@@ -10,8 +10,8 @@ webpush.setVapidDetails(
   VAPID_PRIVATE_KEY
 );
 
-exports.handler = async () => {
-  const subs = loadSubs();
+exports.handler = async (event) => {
+  const subs = await loadSubs(event);
   if (subs.length === 0) {
     return {
       statusCode: 200,
@@ -30,7 +30,7 @@ exports.handler = async () => {
   // remove failed subscriptions
   const validSubs = subs.filter((_, i) => !results[i]?.error);
   if (validSubs.length !== subs.length) {
-    saveSubs(validSubs);
+    await saveSubs(event, validSubs);
   }
 
   return { statusCode: 200, body: JSON.stringify(results) };
