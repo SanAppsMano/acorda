@@ -12,11 +12,17 @@ webpush.setVapidDetails(
 );
 
 exports.handler = async () => {
-  const filePath = process.env.SUBS_FILE
-    ? path.resolve(process.env.SUBS_FILE)
-    : process.env.NETLIFY_DEV
-      ? path.join(__dirname, 'subs.json')
-      : path.join('/tmp', 'subs.json');
+  const paths = [];
+  if (process.env.SUBS_FILE) {
+    paths.push(path.resolve(process.env.SUBS_FILE));
+  } else {
+    if (process.env.NETLIFY_DEV) paths.push(path.join(__dirname, 'subs.json'));
+    paths.push(path.join('/tmp', 'subs.json'));
+  }
+
+  let filePath = paths.find(p => fs.existsSync(p));
+  if (!filePath) filePath = paths[0];
+
   if (!fs.existsSync(filePath)) {
     return { statusCode: 200, body: JSON.stringify({ message: 'Nenhuma subscription.' }) };
   }
