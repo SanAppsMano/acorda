@@ -21,7 +21,8 @@ Este projeto demonstra um fluxo simples de envio de notificações push utilizan
    ```
    Acesse `http://localhost:8888/monitor.html` para visualizar o QR code.
    No celular, abra o link gerado ou escaneie o QR para acessar `subscribe.html` e ativar as notificações.
-   Após a inscrição, utilize o botão do monitor para acordar todos os inscritos.
+   Após a inscrição, o monitor mostra quantas inscrições foram registradas.
+   Use o botão para acordar todos os inscritos.
 
 ## Limpeza
 Por padrão, durante o `netlify dev` as inscrições são gravadas em `netlify/functions/subs.json` na raiz do projeto (via `process.cwd()`), garantindo que todas as funções compartilhem o mesmo arquivo.

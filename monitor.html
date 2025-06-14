@@ -15,11 +15,25 @@
   <a href="/subscribe.html" target="_blank">Ativar alertas</a>
   <div id="qr" style="margin: 1rem auto; width:200px; height:200px;"></div>
   <p>Após a inscrição, no monitor você poderá acordar todos os inscritos.</p>
+  <p id="countInfo">Carregando inscrições...</p>
   <button id="wakeBtn">Acorde todos os inscritos</button>
 
   <script src="./lib/qrcode.min.js"></script>
   <script>
+    async function updateCount() {
+      try {
+        const res = await fetch('/.netlify/functions/getSubs');
+        const data = await res.json();
+        document.getElementById('countInfo').textContent =
+          `Inscrições ativas: ${data.count}`;
+      } catch (err) {
+        document.getElementById('countInfo').textContent =
+          'Não foi possível carregar as inscrições.';
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
+      updateCount();
       const url = window.location.origin + "/subscribe.html";
       const container = document.getElementById('qr');
 
@@ -50,6 +64,7 @@
         } else {
           alert('Notificações enviadas!');
         }
+        updateCount();
         } catch (err) {
           console.error(err);
           alert('Erro ao enviar notificações');
