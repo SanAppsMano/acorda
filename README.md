@@ -24,4 +24,4 @@ Este projeto demonstra um fluxo simples de envio de notificações push utilizan
    Após a inscrição, utilize o botão do monitor para acordar todos os inscritos.
 
 ## Limpeza
-O arquivo `netlify/functions/subs.json` é gerado durante a execução para armazenar as inscrições de push e está ignorado pelo git. Caso queira mudá-lo de local, defina a variável de ambiente `SUBS_FILE` apontando para um caminho absoluto.
+Por padrão, as inscrições são salvas em `/tmp/subs.json`, que é um caminho gravável tanto localmente quanto no ambiente serverless. Caso deseje usar outro local, defina a variável de ambiente `SUBS_FILE` com o caminho desejado.
