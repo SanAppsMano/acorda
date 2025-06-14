@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
+let inMemorySubs = [];
+
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
 
@@ -18,9 +20,10 @@ exports.handler = async (event) => {
 
   const subs = fs.existsSync(filePath)
     ? JSON.parse(fs.readFileSync(filePath))
-    : [];
+    : inMemorySubs;
 
   if (!subs.find(s => s.endpoint === sub.endpoint)) subs.push(sub);
+  inMemorySubs = subs;
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, JSON.stringify(subs, null, 2));
   for (const p of paths) {
