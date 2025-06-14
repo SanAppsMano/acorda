@@ -30,7 +30,7 @@
           width: 200,
           height: 200
         });
-      } else if (QRCode && typeof QRCode.toCanvas === 'function') {
+      } else if (typeof QRCode !== 'undefined' && typeof QRCode.toCanvas === 'function') {
         // Fallback para biblioteca qrcode do Node
         const canvas = document.createElement('canvas');
         container.appendChild(canvas);

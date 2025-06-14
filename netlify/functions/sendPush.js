@@ -12,7 +12,9 @@ webpush.setVapidDetails(
 );
 
 exports.handler = async () => {
-  const filePath = path.join(__dirname, 'subs.json');
+  const filePath = process.env.SUBS_FILE
+    ? path.resolve(process.env.SUBS_FILE)
+    : path.join(__dirname, 'subs.json');
   if (!fs.existsSync(filePath)) {
     return { statusCode: 200, body: JSON.stringify({ message: 'Nenhuma subscription.' }) };
   }

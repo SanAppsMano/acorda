@@ -26,16 +26,20 @@
         return alert('Push não suportado neste navegador.');
       }
       try {
-        const reg = await navigator.serviceWorker.register('sw.js');
+        const reg = await navigator.serviceWorker.register('/sw.js');
         const sub = await reg.pushManager.subscribe({
           userVisibleOnly: true,
           applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
         });
-        await fetch('/.netlify/functions/saveSub', {
+        const response = await fetch('/.netlify/functions/saveSub', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(sub)
         });
+        if (!response.ok) {
+          const text = await response.text();
+          throw new Error('Erro ao salvar inscrição: ' + text);
+        }
         alert('Inscrição realizada com sucesso!');
       } catch (err) {
         console.error('Erro na inscrição:', err);
