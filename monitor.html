@@ -21,11 +21,25 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const url = window.location.origin + "/subscribe.html";
-      new QRCode(document.getElementById("qr"), {
-        text: url,
-        width: 200,
-        height: 200
-      });
+      const container = document.getElementById('qr');
+
+      if (typeof QRCode === 'function') {
+        // Biblioteca qrcodejs
+        new QRCode(container, {
+          text: url,
+          width: 200,
+          height: 200
+        });
+      } else if (QRCode && typeof QRCode.toCanvas === 'function') {
+        // Fallback para biblioteca qrcode do Node
+        const canvas = document.createElement('canvas');
+        container.appendChild(canvas);
+        QRCode.toCanvas(canvas, url, { width: 200 }, (err) => {
+          if (err) console.error('Erro ao gerar QR:', err);
+        });
+      } else {
+        console.error('Biblioteca QRCode não carregada');
+      }
       document.getElementById('wakeBtn').addEventListener('click', async () => {
         try {
         const res = await fetch('/.netlify/functions/sendPush', { method: 'POST' });
